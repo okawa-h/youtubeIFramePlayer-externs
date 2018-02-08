@@ -4,16 +4,16 @@ import js.Browser;
 import js.html.Element;
 import js.html.ScriptElement;
  
-class YoutubeManager {
+class Youtube {
 
 	private static inline var API_URL : String = 'https://www.youtube.com/player_api';
 
 	public static function init(?onAPIReady:Void->Void):Void {
 
-		var script : ScriptElement = Browser.document.createScriptElement();
+		var firstElement:Element = Browser.document.getElementsByTagName('script')[0];
+		var script:ScriptElement = Browser.document.createScriptElement();
 		script.src = API_URL;
-		var firstTag : Element = Browser.document.getElementsByTagName('script')[0];
-		firstTag.parentNode.insertBefore(script,firstTag);
+		firstElement.parentNode.insertBefore(script,firstElement);
 		(cast Browser.window).onYouTubePlayerAPIReady = onAPIReady;
 
 	}

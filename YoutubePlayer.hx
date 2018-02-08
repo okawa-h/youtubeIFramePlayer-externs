@@ -1,64 +1,66 @@
 package js.youtube;
 
 import haxe.extern.EitherType;
-import js.Browser;
-import js.html.ScriptElement;
 import js.html.IFrameElement;
 
+typedef PlayerParameters = {
+	?autoplay      :Int,
+	?cc_load_policy:Int,
+	?color         :Color,
+	?controls      :Int,
+	?disablekb     :Int,
+	?enablejsapi   :Int,
+	?end           :Int,
+	?fs            :Int,
+	?hl            :String,
+	?iv_load_policy:Int,
+	?list          :String,
+	?listType      :ListType,
+	?loop          :Int,
+	?modestbranding:Int,
+	?origin        :Int,
+	?playlist      :Array<String>,
+	?playsinline   :Int,
+	?rel           :Int,
+	?showinfo      :Int,
+	?start         :Int
+}
+
+typedef Options = {
+	?videoId   :String,
+	?width     :Int,
+	?height    :Int,
+	?playerVars:PlayerParameters,
+	?events    :Event
+}
+
 typedef Event = {
-	data   : Dynamic,
-	target : YoutubePlayer
+	?onReady                :ReadyEvent->Void,
+	?onStateChange          :StateChangeEvent->Void,
+	?onPlaybackQualityChange:PlaybackQualityChangeEvent->Void,
+	?onPlaybackRateChange   :PlaybackRateChangeEvent->Void,
+	?onError                :ErrorEvent->Void,
+	?onApiChange            :ApiChangeEvent->Void
 }
 
-typedef PlayerParameter = {
-	?autoplay       : Int,
-	?cc_load_policy : Int,
-	?color       : String,
-	?controls    : Int,
-	?disablekb   : Int,
-	?enablejsapi : Int,
-	?end : Int,
-	?fs  : Int,
-	?hl  : String,
-	?iv_load_policy : Int,
-	?list     : String,
-	?listType : String,
-	?loop     : Int,
-	?modestbranding : Int,
-	?origin   : Int,
-	?playlist : Array<String>,
-	?playsinline : Int,
-	?rel      : Int,
-	?showinfo : Int,
-	?start    : Int
-}
-
-typedef Parameter = {
-	?videoId : String,
-	?width   : Int,
-	?height  : Int,
-	?playerVars : PlayerParameter,
-	?events     : {
-		?onReady       : Event->Void,
-		?onStateChange : Event->Void,
-		?onPlaybackQualityChange : Event->Void,
-		?onPlaybackRateChange    : Event->Void,
-		?onError     : Event->Void,
-		?onApiChange : Event->Void
-	}
-}
+typedef ReadyEvent                 = { target:YoutubePlayer }
+typedef StateChangeEvent           = { target:YoutubePlayer,data:YoutubePlayerState }
+typedef PlaybackQualityChangeEvent = { target:YoutubePlayer,data:PlaybackQuality }
+typedef PlaybackRateChangeEvent    = { target:YoutubePlayer,data:PlaybackQuality }
+typedef ErrorEvent                 = { target:YoutubePlayer,data:Int }
+typedef ApiChangeEvent             = { target:YoutubePlayer,data:Int }
  
 @:native('YT.Player')
 extern class YoutubePlayer {
 
-	public function new(elementId:String,param:Parameter):Void;
+	public function new(elementId:String,options:Options):Void;
 
-	public function cueVideoById(param:{videoId:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:String}):Void;
-	public function loadVideoById(param:{videoId:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:String}):Void;
-	public function cueVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:String}):Void;
-	public function loadVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:String}):Void;
-	public function cuePlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Int,?suggestedQuality:String):Void;
-	public function loadPlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Int,?suggestedQuality:String):Void;
+	public function cueVideoById(param:{videoId:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
+	public function loadVideoById(param:{videoId:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
+	public function cueVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
+	public function loadVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
+	public function cuePlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Int,?suggestedQuality:PlaybackQuality):Void;
+	public function loadPlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Int,?suggestedQuality:PlaybackQuality):Void;
 
 	public function playVideo():Void;
 	public function pauseVideo():Void;
@@ -90,9 +92,9 @@ extern class YoutubePlayer {
 	public function getPlayerState():Int;
 	public function getCurrentTime():Int;
 
-	public function getPlaybackQuality():String;
-	public function setPlaybackQuality(suggestedQuality:String):Void;
-	public function getAvailableQualityLevels():Array<String>;
+	public function getPlaybackQuality():PlaybackQuality;
+	public function setPlaybackQuality(suggestedQuality:PlaybackQuality):Void;
+	public function getAvailableQualityLevels():Array<PlaybackQuality>;
 
 	public function getDuration():Int;
 	public function getVideoUrl():String;
@@ -101,13 +103,55 @@ extern class YoutubePlayer {
 	public function getPlaylist():Array<String>;
 	public function getPlaylistIndex():Int;
 
-	public function addEventListener(event:String,listener:String):Void;
-	public function removeEventListener(event:String,listener:String):Void;
+	public function addEventListener<T>(event:String,listener:T->Void):Void;
+	public function removeEventListener<T>(event:String,listener:T->Void):Void;
 
 	public function getIframe():IFrameElement;
 	public function destroy():Void;
 
-	public function getOptions(?module:String,?option:String):Dynamic;
-	public function setOption(?module:String,?option:String,?value:String):Dynamic;
+	public function getOption(?module:OptionModule,?option:ModuleOption):Array<OptionModule>;
+	public function setOption(?module:OptionModule,?option:ModuleOption,?value:EitherType<Int,Bool>):YoutubePlayer;
+
+}
+
+@:enum abstract PlaybackQuality(String) from String to String {
+	var small   :String = 'small';
+	var medium  :String = 'medium';
+	var large   :String = 'large';
+	var hd720   :String = 'hd720';
+	var hd1080  :String = 'hd1080';
+	var highres :String = 'highres';
+	var _default:String = 'default';
+}
+
+@:enum abstract Color(String) from String to String {
+    var red  :String = 'red';
+    var white:String = 'white';
+}
+
+@:enum abstract ListType(String) from String to String {
+	var search      :String = 'search';
+	var user_uploads:String = 'user_uploads';
+	var playlist    :String = 'playlist';
+}
+
+@:enum abstract OptionModule(String) from String to String {
+	var cc:String = 'cc';
+}
+
+@:enum abstract ModuleOption(String) from String to String {
+	var fontsize:String = 'fontsize';
+	var reload  :String = 'reload';
+}
+
+@:native('YT.PlayerState')
+extern class YoutubePlayerState {
+
+	public static var UNSTARTED:Int;
+	public static var ENDED    :Int;
+	public static var PLAYING  :Int;
+	public static var PAUSED   :Int;
+	public static var BUFFERING:Int;
+	public static var CUED     :Int;
 
 }
