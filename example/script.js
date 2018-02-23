@@ -19,8 +19,14 @@ js_youtube_Youtube.init = function(onAPIReady) {
 	var script = window.document.createElement("script");
 	script.src = "https://www.youtube.com/player_api";
 	firstElement.parentNode.insertBefore(script,firstElement);
-	window.onYouTubePlayerAPIReady = onAPIReady;
+	window.onYouTubePlayerAPIReady = function() {
+		js_youtube_Youtube.isLoadedAPI = true;
+		if(onAPIReady != null) {
+			onAPIReady();
+		}
+	};
 };
+js_youtube_Youtube.isLoadedAPI = false;
 js_youtube_Youtube.API_URL = "https://www.youtube.com/player_api";
 Main.main();
 })();

@@ -1,3 +1,3 @@
 -main Main
--js public/script.js
--cp src
+-js script.js
+-cp ../

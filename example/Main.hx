@@ -19,7 +19,7 @@ class Main {
 
 		function onAPIReady() {
 
-			var player :YoutubePlayer = new YoutubePlayer(target.id,{
+			var player:YoutubePlayer = new YoutubePlayer(target.id,{
 				videoId:target.dataset.videoId,
 				events : {
 					onReady:function(event:ReadyEvent) {
