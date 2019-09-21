@@ -7,31 +7,27 @@ import js.youtube.YoutubePlayer;
 
 class Main {
 
-	public static function main():Void {
+    public static function main():Void {
 
-		Browser.window.addEventListener('DOMContentLoaded',init);
+        Browser.window.addEventListener('DOMContentLoaded',function() {
 
-	}
+            Youtube.init(onAPIReady);
 
-	private static function init():Void {
+        });
 
-		var target:Element = Browser.document.getElementById('video');
+    }
 
-		function onAPIReady() {
+    private static function onAPIReady():Void {
 
-			var player:YoutubePlayer = new YoutubePlayer(target.id,{
-				videoId:target.dataset.videoId,
-				events : {
-					onReady:function(event:ReadyEvent) {
-						trace(event);
-					}
-				}
-			});
+        var target:Element = Browser.document.getElementById('video');
+        var player:YoutubePlayer = new YoutubePlayer(target.id,{
+            videoId:target.dataset.videoId,
+            events: {
+                onReady:function(event:ReadyEvent) {
+                }
+            }
+        });
 
-		}
-
-		Youtube.init(onAPIReady);
-
-	}
+    }
 
 }
