@@ -49,7 +49,7 @@ typedef PlaybackQualityChangeEvent = { target:YoutubePlayer,data:PlaybackQuality
 typedef PlaybackRateChangeEvent    = { target:YoutubePlayer,data:PlaybackQuality }
 typedef ErrorEvent                 = { target:YoutubePlayer,data:Int }
 typedef ApiChangeEvent             = { target:YoutubePlayer,data:Int }
- 
+
 @:native('YT.Player')
 extern class YoutubePlayer {
 
@@ -74,7 +74,7 @@ extern class YoutubePlayer {
 	public function playVideoAt(index:Int):Void;
 
 	public function mute():Void;
-	public function unMute():Void; 
+	public function unMute():Void;
 	public function isMuted():Bool;
 	public function setVolume(volume:Int):Void;
 	public function getVolume():Int;
@@ -144,14 +144,11 @@ extern class YoutubePlayer {
 	var reload  :String = 'reload';
 }
 
-@:native('YT.PlayerState')
-extern class YoutubePlayerState {
-
-	public static var UNSTARTED:Int;
-	public static var ENDED    :Int;
-	public static var PLAYING  :Int;
-	public static var PAUSED   :Int;
-	public static var BUFFERING:Int;
-	public static var CUED     :Int;
-
+@:enum abstract YoutubePlayerState {
+	var UNSTARTED:Int = -1;
+	var ENDED    :Int = 0;
+	var PLAYING  :Int = 1;
+	var PAUSED   :Int = 2;
+	var BUFFERING:Int = 3;
+	var CUED     :Int = 5;
 }
