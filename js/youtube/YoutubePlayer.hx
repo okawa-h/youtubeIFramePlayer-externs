@@ -144,11 +144,11 @@ extern class YoutubePlayer {
 	var reload  :String = 'reload';
 }
 
-@:enum abstract YoutubePlayerState {
-	var UNSTARTED:Int = -1;
-	var ENDED    :Int = 0;
-	var PLAYING  :Int = 1;
-	var PAUSED   :Int = 2;
-	var BUFFERING:Int = 3;
-	var CUED     :Int = 5;
+@:enum abstract YoutubePlayerState(Int) {
+	var UNSTARTED = -1;
+	var ENDED     = 0;
+	var PLAYING   = 1;
+	var PAUSED    = 2;
+	var BUFFERING = 3;
+	var CUED      = 5;
 }
