@@ -28,8 +28,8 @@ typedef PlayerParameters = {
 
 typedef Options = {
 	?videoId   :String,
-	?width     :Int,
-	?height    :Int,
+	?width     :Float,
+	?height    :Float,
 	?playerVars:PlayerParameters,
 	?events    :Event
 }
@@ -55,18 +55,18 @@ extern class YoutubePlayer {
 
 	public function new(elementId:String,options:Options):Void;
 
-	public function cueVideoById(param:{videoId:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
-	public function loadVideoById(param:{videoId:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
-	public function cueVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
-	public function loadVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Int,?endSeconds:Int,?suggestedQuality:PlaybackQuality}):Void;
-	public function cuePlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Int,?suggestedQuality:PlaybackQuality):Void;
-	public function loadPlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Int,?suggestedQuality:PlaybackQuality):Void;
+	public function cueVideoById(param:{videoId:String,?startSeconds:Float,?endSeconds:Float,?suggestedQuality:PlaybackQuality}):Void;
+	public function loadVideoById(param:{videoId:String,?startSeconds:Float,?endSeconds:Float,?suggestedQuality:PlaybackQuality}):Void;
+	public function cueVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Float,?endSeconds:Float,?suggestedQuality:PlaybackQuality}):Void;
+	public function loadVideoByUrl(param:{mediaContentUrl:String,?startSeconds:Float,?endSeconds:Float,?suggestedQuality:PlaybackQuality}):Void;
+	public function cuePlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Float,?suggestedQuality:PlaybackQuality):Void;
+	public function loadPlaylist(playlist:EitherType<String,Array<String>>,?index:Int,?startSeconds:Float,?suggestedQuality:PlaybackQuality):Void;
 
 	public function playVideo():Void;
 	public function pauseVideo():Void;
 	public function stopVideo():Void;
 
-	public function seekTo(seconds:Int,allowSeekAhead:Bool):Void;
+	public function seekTo(seconds:Float,allowSeekAhead:Bool):Void;
 	public function clearVideo():Void;
 
 	public function nextVideo():Void;
@@ -82,21 +82,21 @@ extern class YoutubePlayer {
 	public function setSize(?width:Float,?height:Float):YoutubePlayer;
 
 	public function getPlaybackRate():Float;
-	public function setPlaybackRate(suggestedRate:Int):Void;
+	public function setPlaybackRate(suggestedRate:Float):Void;
 	public function getAvailablePlaybackRates():Array<Float>;
 
 	public function setLoop(loopPlaylists:Bool):Void;
 	public function setShuffle(shufflePlaylist:Bool):Void;
 
 	public function getVideoLoadedFraction():Float;
-	public function getPlayerState():Int;
-	public function getCurrentTime():Int;
+	public function getPlayerState():YoutubePlayerState;
+	public function getCurrentTime():Float;
 
 	public function getPlaybackQuality():PlaybackQuality;
 	public function setPlaybackQuality(suggestedQuality:PlaybackQuality):Void;
 	public function getAvailableQualityLevels():Array<PlaybackQuality>;
 
-	public function getDuration():Int;
+	public function getDuration():Float;
 	public function getVideoUrl():String;
 	public function getVideoEmbedCode():String;
 
